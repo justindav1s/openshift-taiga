@@ -44,13 +44,11 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: ${NAME}:${IMAGESTREAM_TAG}
+        name: "${NAME}:${IMAGESTREAM_TAG}"
     resources:
       limits:
-        cpu: '4'
-        memory: 4Gi
     postCommit:
-      script: "./manage.py test"
+      script: "curl -k https://raw.githubusercontent.com/springdo/openshift-taiga/${TAIGA_SETTINGS_VERSION}/taiga-back/local.py -o /opt/app-root/src/settings/local.py; ./manage.py test"
 parameters:
 - name: NAME
   required: true
@@ -60,7 +58,7 @@ parameters:
   value: https://github.com/taigaio/taiga-back.git
 - name: GIT_UPSTREAM_REF
   required: true
-  value: stable
+  value: "stable"
 - name: IMAGESTREAM_TAG
   required: true
   value: latest
@@ -69,7 +67,10 @@ parameters:
   value: python
 - name: S2I_BUILDER_IMAGE_TAG
   required: true
-  value: 3.5
+  value: "3.6"
 - name: S2I_BUILDER_IMAGE_NAMESPACE
   required: true
   value: openshift
+- name: TAIGA_SETTINGS_VERSION
+  required: true
+  value: master
