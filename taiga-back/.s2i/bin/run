@@ -1,16 +1,26 @@
 #!/bin/bash
 echo "Before running - setting up the default projects for Scrum and Kanban"
+SETUP_DATA=${SETUP_DATA:-0}
 
-setup_data(){
+init_taiga(){
     python manage.py migrate --noinput
-    python manage.py loaddata initial_user
     python manage.py loaddata initial_project_templates
     python manage.py compilemessages
     python manage.py collectstatic --noinput
+}
+
+setup_data(){
+    python manage.py loaddata initial_user
     python manage.py sample_data
 }
 
-setup_data
+
+if [ $SETUP_DATA -eq 0 ]; then
+    echo "INFO - adding sample data and default admin user "
+    setup_data
+fi
+
+init_taiga
 rc=$?
 if [ $rc -eq 0 ]; then
     echo "ERROR - Cannot create template Scrum and Kanban projects"
