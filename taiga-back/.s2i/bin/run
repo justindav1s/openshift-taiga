@@ -1,0 +1,5 @@
+#!/bin/bash
+echo "Before running - setting up the default projects for Scrum and Kanban"
+python manage.py loaddata initial_project_templates
+
+exec /usr/libexec/s2i/run

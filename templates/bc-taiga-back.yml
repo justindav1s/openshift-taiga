@@ -59,10 +59,10 @@ parameters:
   value: https://github.com/springdo/openshift-taiga.git
 - name: GIT_UPSTREAM_CONTEXT_DIR
   required: true
-  value: https://github.com/springdo/openshift-taiga.git
+  value: taiga-back
 - name: GIT_UPSTREAM_REF
   required: true
-  value: "stable"
+  value: "master"
 - name: IMAGESTREAM_TAG
   required: true
   value: latest
@@ -75,9 +75,6 @@ parameters:
 - name: S2I_BUILDER_IMAGE_NAMESPACE
   required: true
   value: openshift
-- name: TAIGA_SETTINGS_VERSION
-  required: true
-  value: master
 - name: TAIGA_VERSION
   required: true
   value: stable
