@@ -32,6 +32,7 @@ objects:
       git:
         uri: "${GIT_UPSTREAM_URL}"
         ref: "${GIT_UPSTREAM_REF}"
+      contextDir: "${GIT_UPSTREAM_CONTEXT_DIR}"
     strategy:
       type: Source
       sourceStrategy:
@@ -41,21 +42,24 @@ objects:
           name: "${S2I_BUILDER_IMAGE}:${S2I_BUILDER_IMAGE_TAG}"
         env:
         - name: PIP_INDEX_URL
+        - name: TAIGA_VERSION
+          value: "${TAIGA_VERSION}"
     output:
       to:
         kind: ImageStreamTag
         name: "${NAME}:${IMAGESTREAM_TAG}"
     resources:
       limits:
-    postCommit:
-      script: "curl -k https://raw.githubusercontent.com/springdo/openshift-taiga/${TAIGA_SETTINGS_VERSION}/taiga-back/local.py -o /opt/app-root/src/settings/local.py; ./manage.py test"
 parameters:
 - name: NAME
   required: true
   value: taiga-back
 - name: GIT_UPSTREAM_URL
   required: true
-  value: https://github.com/taigaio/taiga-back.git
+  value: https://github.com/springdo/openshift-taiga.git
+- name: GIT_UPSTREAM_CONTEXT_DIR
+  required: true
+  value: https://github.com/springdo/openshift-taiga.git
 - name: GIT_UPSTREAM_REF
   required: true
   value: "stable"
@@ -74,3 +78,6 @@ parameters:
 - name: TAIGA_SETTINGS_VERSION
   required: true
   value: master
+- name: TAIGA_VERSION
+  required: true
+  value: stable

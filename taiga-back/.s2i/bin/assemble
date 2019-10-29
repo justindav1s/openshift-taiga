@@ -1,0 +1,22 @@
+#!/bin/bash
+echo "Before assembling"
+
+TAIGA_VERSION=${TAIGA_VERSION:-"stable"}
+
+git clone https://github.com/taigaio/taiga-back.git /tmp/src/taiga-back      
+cd /tmp/src/taiga-back 
+git checkout ${TAIGA_VERSION}
+
+echo "Running standard assembling"
+
+/usr/libexec/s2i/assemble
+rc=$?
+
+if [ $rc -eq 0 ]; then
+    echo "Putting local.py in settings dir for OCP fun times"
+    mv -v ${HOME}/local.py ${HOME}/taiga-back/settings/
+else
+    echo "After failed assembling"
+fi
+
+exit $rc
