@@ -1,5 +1,19 @@
 #!/bin/bash
 echo "Before running - setting up the default projects for Scrum and Kanban"
-python manage.py loaddata initial_project_templates
+
+setup_data(){
+    python manage.py migrate --noinput
+    python manage.py loaddata initial_user
+    python manage.py loaddata initial_project_templates
+    python manage.py compilemessages
+    python manage.py collectstatic --noinput
+    python manage.py sample_data
+}
+
+setup_data
+rc=$?
+if [ $rc -eq 0 ]; then
+    echo "ERROR - Cannot create template Scrum and Kanban projects"
+fi
 
 exec /usr/libexec/s2i/run
