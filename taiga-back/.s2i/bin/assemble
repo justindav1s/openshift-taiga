@@ -17,6 +17,7 @@ if [ $rc -eq 0 ]; then
     mv -v ${HOME}/local.py ${HOME}/taiga-back/settings/
     mv ${HOME}/taiga-back/* ${HOME}/
     fix-permissions /opt/app-root -P
+    fix-permissions /usr/local/taiga -P
 else
     echo "After failed assembling"
 fi
