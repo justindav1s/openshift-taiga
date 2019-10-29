@@ -12,10 +12,10 @@ DEBUG = os.environ.get('DEBUG', 'False')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'taiga',
-        'USER': 'taiga',
+        'NAME':  os.environ.get('DATABASE_NAME', 'taiga'),
+        'USER':  os.environ.get('DATABASE_USER', 'taiga'),
         'PASSWORD': os.environ.get('DATABASE_PASSWORD', ''),
-        'HOST': os.environ.get('DATABASE_SERVICE_NAME', ''),
+        'HOST': os.environ.get('DATABASE_SERVICE_NAME', 'postgresql'),
         'PORT': '5432',
     }
 }
@@ -30,8 +30,8 @@ SITES["api"]["domain"] = os.environ.get('TAIGA_BACK_DOMAIN', 'other.com')
 MEDIA_URL = os.environ.get('TAIGA_MEDIA_URL', SITES["api"]["scheme"] + '://' + SITES["api"]["domain"] + '/media/')
 STATIC_URL = os.environ.get('TAIGA_STATIC_URL', SITES["api"]["scheme"] + '://' + SITES["api"]["domain"] + '/static/')
 
-MEDIA_ROOT = '/usr/local/taiga/media'
-STATIC_ROOT = '/usr/local/taiga/static'
+MEDIA_ROOT = os.environ.get('HOME')+'/media'
+STATIC_ROOT = os.environ.get('HOME')+'/static'
 
 # disable public registration by default
 PUBLIC_REGISTER_ENABLED = os.environ.get('TAIGA_PUBLIC_REGISTER_ENABLED', False)
