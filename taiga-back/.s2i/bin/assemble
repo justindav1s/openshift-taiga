@@ -15,6 +15,7 @@ rc=$?
 if [ $rc -eq 0 ]; then
     echo "Putting local.py in settings dir for OCP fun times"
     mv -v ${HOME}/local.py ${HOME}/taiga-back/settings/
+    mv ${HOME}/taiga-back/* ${HOME}/
 else
     echo "After failed assembling"
 fi
