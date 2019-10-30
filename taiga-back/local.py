@@ -57,9 +57,10 @@ DEFAULT_FROM_EMAIL = os.environ.get('TAIGA_FROM_EMAIL_ADDRESS', 'no-reply@exampl
 
 # CUSTOM PLUGINS
 if os.environ.get('USE_LDAP') == 'True':
+    print("INFO - Setting LDAP for Auth beacuse USE_LDAP true")
     INSTALLED_APPS += ["taiga_contrib_ldap_auth_ext"]
     LDAP_SERVER = os.environ.get('LDAP_SERVER', 'ldap://example.com')
-    LDAP_PORT = os.environ.get('LDAP_PORT', 389)
+    LDAP_PORT = os.environ.get('LDAP_PORT', 636)
     LDAP_START_TLS = os.environ.get('LDAP_START_TLS', False)
     LDAP_BIND_DN = os.environ.get('LDAP_BIND_DN', 'CN=SVC Account,OU=Service Accounts,OU=Servers,DC=example,DC=com')
     LDAP_BIND_PASSWORD = os.environ.get('LDAP_BIND_PASSWORD', '<REPLACE_ME>')
