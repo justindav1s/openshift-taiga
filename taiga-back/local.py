@@ -20,10 +20,10 @@ DATABASES = {
     }
 }
 
-SITES["front"]["scheme"] = os.environ.get('TAIGA_FRONT_SCHEME', 'http')
+SITES["front"]["scheme"] = os.environ.get('TAIGA_FRONT_SCHEME', 'https')
 SITES["front"]["domain"] = os.environ.get('TAIGA_FRONT_DOMAIN', 'test.com')
 
-SITES["api"]["scheme"] = os.environ.get('TAIGA_BACK_SCHEME', 'http')
+SITES["api"]["scheme"] = os.environ.get('TAIGA_BACK_SCHEME', 'https')
 SITES["api"]["domain"] = os.environ.get('TAIGA_BACK_DOMAIN', 'other.com')
 
 
@@ -34,7 +34,7 @@ MEDIA_ROOT = os.environ.get('HOME')+'/media'
 STATIC_ROOT = os.environ.get('HOME')+'/static'
 
 # disable public registration by default
-PUBLIC_REGISTER_ENABLED = os.environ.get('TAIGA_PUBLIC_REGISTER_ENABLED', False)
+PUBLIC_REGISTER_ENABLED = os.environ.get('PUBLIC_REGISTER_ENABLED', False)
 
 DEFAULT_FROM_EMAIL = os.environ.get('TAIGA_FROM_EMAIL_ADDRESS', 'no-reply@example.com')
 # SERVER_EMAIL = DEFAULT_FROM_EMAIL
