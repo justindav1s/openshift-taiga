@@ -6,6 +6,8 @@ TAIGA_VERSION=${TAIGA_VERSION:-"stable"}
 git clone https://github.com/taigaio/taiga-back.git /tmp/src/taiga-back      
 cd /tmp/src/taiga-back 
 git checkout ${TAIGA_VERSION}
+# TODO - create list and iterate over plugins to add them 
+echo "taiga-contrib-ldap-auth-ext==0.4.4" >> requirements.txt
 
 echo "Running standard assembling"
 

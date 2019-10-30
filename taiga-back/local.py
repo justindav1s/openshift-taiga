@@ -53,3 +53,17 @@ DEFAULT_FROM_EMAIL = os.environ.get('TAIGA_FROM_EMAIL_ADDRESS', 'no-reply@exampl
 # EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 # EMAIL_PORT = os.environ.get('EMAIL_PORT', '')
 # DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'no-reply@example.com')
+
+
+# CUSTOM PLUGINS
+if os.environ.get('USE_LDAP') == 'True':
+    INSTALLED_APPS += ["taiga_contrib_ldap_auth_ext"]
+    LDAP_SERVER = os.environ.get('LDAP_SERVER', 'ldap://example.com')
+    LDAP_PORT = os.environ.get('LDAP_PORT', 389)
+    LDAP_START_TLS = os.environ.get('LDAP_START_TLS', False)
+    LDAP_BIND_DN = os.environ.get('LDAP_BIND_DN', 'CN=SVC Account,OU=Service Accounts,OU=Servers,DC=example,DC=com')
+    LDAP_BIND_PASSWORD = os.environ.get('LDAP_BIND_PASSWORD', '<REPLACE_ME>')
+    LDAP_SEARCH_BASE = os.environ.get('LDAP_SEARCH_BASE', 'OU=DevTeam,DC=example,DC=net')
+    LDAP_USERNAME_ATTRIBUTE = os.environ.get('LDAP_USERNAME_ATTRIBUTE', 'uid')
+    LDAP_EMAIL_ATTRIBUTE = os.environ.get('LDAP_EMAIL_ATTRIBUTE', 'mail')
+    LDAP_FULL_NAME_ATTRIBUTE = os.environ.get('LDAP_FULL_NAME_ATTRIBUTE', 'displayName')
