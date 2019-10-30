@@ -1,0 +1,193 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: ${NAME}-deploy
+  annotations:
+    openshift.io/display-name: Static JS App Deploy Template
+    description: A template to deploy your an App with a HTTP endpoint
+    iconClass: icon-cube
+    tags: http
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      build: "${NAME}"
+    name: "${NAME}"
+  spec: {}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: "${NAME}"
+    labels:
+      app: "${NAME}"
+  spec:
+    replicas: 1
+    selector:
+      name: "${NAME}"
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        creationTimestamp:
+        labels:
+          name: "${NAME}"
+      spec:
+        containers:
+        - image: "${IMAGE_REPO}/${NAMESPACE}/${NAME}:${APP_TAG}"
+          imagePullPolicy: Always
+          name: "${NAME}"
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: "/dev/termination-log"
+          volumeMounts:
+            - mountPath: "${ENV_MOUNT_PATH}"
+              name: app-config
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            items:
+              - key: conf.json
+                path: conf.json
+            name: taiga-frontend-conf
+          name: app-config
+    test: false
+    triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - "${NAME}"
+        from:
+          kind: ImageStreamTag
+          namespace: "${NAMESPACE}"
+          name: "${NAME}:${APP_TAG}"
+    - type: ConfigChange
+- apiVersion: v1
+  kind: ConfigMap
+  data:
+    conf.json: |-
+      {
+          "api": "${TAIGA_BACKEND_URL}/api/v1/",
+          "eventsUrl": null,
+          "eventsMaxMissedHeartbeats": 5,
+          "eventsHeartbeatIntervalTime": 60000,
+          "eventsReconnectTryInterval": 10000,
+          "debug": "${ENABLE_DEBUG}",
+          "debugInfo": true,
+          "defaultLanguage": "en",
+          "themes": ["taiga"],
+          "defaultTheme": "taiga",
+          "publicRegisterEnabled": "${PUBLIC_REGISTER_ENABLED}",
+          "feedbackEnabled": true,
+          "supportUrl": "https://tree.taiga.io/support/",
+          "privacyPolicyUrl": null,
+          "termsOfServiceUrl": null,
+          "GDPRUrl": null,
+          "maxUploadFileSize": null,
+          "contribPlugins": [],
+          "tribeHost": null,
+          "importers": [],
+          "gravatar": true,
+          "rtlLanguages": ["fa"]
+      }
+  metadata:
+    name: taiga-frontend-conf
+    namespace: ${NAMESPACE}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      name: "${NAME}"
+    name: "${NAME}"
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      name: "${NAME}"
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      name: "${ROUTE_PATH}"
+    name: "${ROUTE_PATH}"
+  spec:
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: "${NAME}"
+      weight: 100
+    wildcardPolicy: None
+parameters:
+- name: NAME
+  displayName: Name
+  description: The name assigned to all objects and the related imagestream.
+  required: true
+- name: ROUTE_PATH
+  displayName: Route Path
+  description: The address of the front end app
+  required: true
+- name: APP_TAG
+  displayName: App Tag
+  description: The tag of the image to use eg latest.
+  value: latest
+  required: true
+- name: NAMESPACE
+  displayName: Docker image namespace
+  description: The namespace of the image to use eg js-apps.
+  required: true
+- name: IMAGE_REPO
+  displayName: Docker image repository
+  description: The docker repository containing the image to use
+  required: true
+  value: docker-registry.default.svc:5000
+- name: DEPLOYER_USER
+  displayName: Deployer User
+  description: The name to the serviceaccount user for deploying apps eg jenkins
+  value: jenkins
+  required: true
+- name: TAIGA_BACKEND_URL
+  required: true
+  displayName: Set mode for Taiga debugging
+  description: Set mode for debugging on or off
+- name: PUBLIC_REGISTER_ENABLED
+  displayName: Set sign up on or off
+  description: Set sign up on or off
+  value: "false"
+- name: ENABLE_DEBUG
+  displayName: Set mode for Taiga debugging
+  description: Set mode for debugging on or off
+  value: "false"
+- name: ENV_MOUNT_PATH
+  displayName: Location for the env file to be loaded.
+  description: Location for the env file to be loaded. This could be /opt/app-root/src for nginx or /usr/src/app for a node app
+  value: "/opt/app-root/src"
+labels:
+  template: ${NAME}-deploy-template

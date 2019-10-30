@@ -30,7 +30,7 @@ objects:
         - "${NAME}"
         from:
           kind: ImageStreamTag
-          namespace: "${IMAGESTREAM_NAMESPACE}"
+          namespace: "${NAMESPACE}"
           name: "${IMAGESTREAM_NAME}:${IMAGESTREAM_TAG}"
     - type: ConfigChange
     replicas: 1
@@ -191,7 +191,7 @@ parameters:
 - name: IMAGESTREAM_NAME
   required: true
   value: taiga-back
-- name: IMAGESTREAM_NAMESPACE
+- name: NAMESPACE
   required: true
   value: openshift
 - name: IMAGESTREAM_TAG
