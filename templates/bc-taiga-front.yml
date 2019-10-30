@@ -52,7 +52,7 @@ objects:
 parameters:
 - name: NAME
   required: true
-  value: taiga-back
+  value: taiga-front
 - name: GIT_UPSTREAM_URL
   required: true
   value: https://github.com/springdo/openshift-taiga.git

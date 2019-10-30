@@ -1,22 +1,36 @@
 # 1. Create new projects for the bc and dc 
-NAMESPACE=$1
+
+NAMESPACE=${2:-"labs-pm"}
+CLUSTER_DOMAIN=${1}
+if [ -z "${1}" ];then echo "Please set the cluster url eg apps.mydomain.location.example.com"; exit 1;fi
+
+echo "\n Creating new project ${NAMESPACE} and setting it"
 oc new-project ${NAMESPACE}
+oc project ${NAMESPACE}
 
 # 2. Run the builds for each components
 # defaults are probs fine for standard build of latest stable branch
+echo "\n Running build for Taiga Backend "
 oc process -f templates/bc-taiga-back.yml \
     | oc apply -n ${NAMESPACE} -f - 
 oc start-build -n ${NAMESPACE} bc/taiga-back
 
+echo "\n Running build for Taiga frontend "
+oc process -f templates/bc-taiga-front.yml \
+    | oc apply -n ds-test -f -
+oc start-build -n ${NAMESPACE} bc/taiga-front
+
 # 3. Deploy the images and config maps
 # PostgreSQL db?
+echo "\n Deploying PostgreSQL for Taiga Backend"
 oc process -f templates/dc-postgresql-persistent.yml \
     -p POSTGRESQL_USER=taiga \
     -p POSTGRESQL_DATABASE=taiga \
     -p VOLUME_CAPACITY=10Gi \
-    -p POSTGRESQL_VERSION=9.6 \
+    -p POSTGRESQL_VERSION=10 \
     | oc apply -n ${NAMESPACE} -f -
 
+echo "\n Deploying Taiga Backend"
 oc process -f templates/dc-taiga-back.yml \
     -p IMAGESTREAM_NAMESPACE=${NAMESPACE} \
     -p TAIGA_FRONT_DOMAIN=taiga-${NAMESPACE}.apps.forumeu.emea-1.rht-labs.com \
