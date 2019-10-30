@@ -2,7 +2,7 @@
 
 NAMESPACE=${2:-"labs-pm"}
 CLUSTER_DOMAIN=${1}
-if [ -z "${1}" ];then echo "Please set the cluster url eg apps.mydomain.location.example.com"; exit 1;fi
+if [ -z "${1}" ];then echo "Please set the cluster url by passing a param to this script. eg ./run.sh apps.mydomain.location.example.com"; exit 1;fi
 
 echo "\n Creating new project ${NAMESPACE} and setting it"
 oc new-project ${NAMESPACE}
