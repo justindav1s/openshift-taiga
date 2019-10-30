@@ -4,25 +4,25 @@ NAMESPACE=${2:-"labs-pm"}
 CLUSTER_DOMAIN=${1}
 if [ -z "${1}" ];then echo "Please set the cluster url by passing a param to this script. eg ./run.sh apps.mydomain.location.example.com"; exit 1;fi
 
-echo "\n Creating new project ${NAMESPACE} and setting it"
+echo "\n✅ Creating new project ${NAMESPACE} and setting it"
 oc new-project ${NAMESPACE}
 oc project ${NAMESPACE}
 
 # 2. Run the builds for each components
 # defaults are probs fine for standard build of latest stable branch
-echo "\n Running build for Taiga Backend "
+echo "\n✅ Running build for Taiga Backend "
 oc process -f templates/bc-taiga-back.yml \
     | oc apply -n ${NAMESPACE} -f - 
 oc start-build -n ${NAMESPACE} bc/taiga-back
 
-echo "\n Running build for Taiga frontend "
+echo "\n✅ Running build for Taiga frontend "
 oc process -f templates/bc-taiga-front.yml \
-    | oc apply -n ds-test -f -
+    | oc apply -n ${NAMESPACE} -f -
 oc start-build -n ${NAMESPACE} bc/taiga-front
 
 # 3. Deploy the images and config maps
 # PostgreSQL db?
-echo "\n Deploying PostgreSQL for Taiga Backend"
+echo "\n✅ Deploying PostgreSQL for Taiga Backend"
 oc process -f templates/dc-postgresql-persistent.yml \
     -p POSTGRESQL_USER=taiga \
     -p POSTGRESQL_DATABASE=taiga \
@@ -30,7 +30,7 @@ oc process -f templates/dc-postgresql-persistent.yml \
     -p POSTGRESQL_VERSION=10 \
     | oc apply -n ${NAMESPACE} -f -
 
-echo "\n Deploying Taiga Backend"
+echo "\n✅ Deploying Taiga Backend"
 oc process -f templates/dc-taiga-back.yml \
     -p NAMESPACE=${NAMESPACE} \
     -p TAIGA_FRONT_DOMAIN=taiga-${NAMESPACE}.${CLUSTER_DOMAIN} \
@@ -38,7 +38,7 @@ oc process -f templates/dc-taiga-back.yml \
     -p PUBLIC_REGISTER_ENABLED=true \
     | oc apply -n ${NAMESPACE} -f -
 
-echo "\n Deploying Taiga Frontend"
+echo "\n✅ Deploying Taiga Frontend"
 oc process -f templates/dc-taiga-front.yml \
     -p NAME=taiga-front \
     -p ROUTE_PATH=taiga \
