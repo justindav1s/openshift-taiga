@@ -33,8 +33,8 @@ oc process -f templates/dc-postgresql-persistent.yml \
 echo "\n Deploying Taiga Backend"
 oc process -f templates/dc-taiga-back.yml \
     -p NAMESPACE=${NAMESPACE} \
-    -p TAIGA_FRONT_DOMAIN=taiga-${NAMESPACE}.apps.forumeu.emea-1.rht-labs.com \
-    -p TAIGA_BACK_DOMAIN=taiga-back-${NAMESPACE}.apps.forumeu.emea-1.rht-labs.com \
+    -p TAIGA_FRONT_DOMAIN=taiga-${NAMESPACE}.${CLUSTER_DOMAIN} \
+    -p TAIGA_BACK_DOMAIN=taiga-back-${NAMESPACE}.${CLUSTER_DOMAIN} \
     -p PUBLIC_REGISTER_ENABLED=true \
     | oc apply -n ${NAMESPACE} -f -
 
@@ -43,7 +43,7 @@ oc process -f templates/dc-taiga-front.yml \
     -p NAME=taiga-front \
     -p ROUTE_PATH=taiga \
     -p NAMESPACE=${NAMESPACE} \
-    -p TAIGA_BACKEND_URL=https://taiga-back-${NAMESPACE}.apps.forumeu.emea-1.rht-labs.com \
+    -p TAIGA_BACKEND_URL=https://taiga-back-${NAMESPACE}.${CLUSTER_DOMAIN} \
     -p PUBLIC_REGISTER_ENABLED=true \
     -p ENV_MOUNT_PATH="/opt/app-root/src/settings/" \
     | oc apply -n ${NAMESPACE} -f -
