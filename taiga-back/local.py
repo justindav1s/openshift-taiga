@@ -1,11 +1,6 @@
 from .common import *
 import os
 
-try:
-    from .logging import *
-except ImportError:
-    pass
-
 LOGLEVEL = os.environ.get('LOGLEVEL', 'debug').upper()
 DEBUG = os.environ.get('DEBUG', 'False')
 
@@ -56,8 +51,14 @@ DEFAULT_FROM_EMAIL = os.environ.get('TAIGA_FROM_EMAIL_ADDRESS', 'no-reply@exampl
 
 
 # CUSTOM PLUGINS
-if os.environ.get('USE_LDAP') == 'True':
-    print("INFO - Setting LDAP for Auth beacuse USE_LDAP true")
+
+#########################################
+## LDAP
+#########################################
+
+if os.getenv('TAIGA_ENABLE_LDAP').lower() == 'true':
+    # see https://github.com/Monogramm/taiga-contrib-ldap-auth-ext
+    print("Taiga contrib LDAP Auth Ext enabled")
     INSTALLED_APPS += ["taiga_contrib_ldap_auth_ext"]
     LDAP_SERVER = os.environ.get('LDAP_SERVER', 'ldap://example.com')
     LDAP_PORT = os.environ.get('LDAP_PORT', 636)
@@ -68,3 +69,18 @@ if os.environ.get('USE_LDAP') == 'True':
     LDAP_USERNAME_ATTRIBUTE = os.environ.get('LDAP_USERNAME_ATTRIBUTE', 'uid')
     LDAP_EMAIL_ATTRIBUTE = os.environ.get('LDAP_EMAIL_ATTRIBUTE', 'mail')
     LDAP_FULL_NAME_ATTRIBUTE = os.environ.get('LDAP_FULL_NAME_ATTRIBUTE', 'displayName')
+
+
+#########################################
+## GITLAB
+#########################################
+
+if os.getenv('TAIGA_ENABLE_GITLAB_AUTH').lower() == 'true':
+    # see https://github.com/taigaio/taiga-contrib-gitlab-auth
+    print("Taiga contrib GitLab Auth enabled")
+    INSTALLED_APPS += ["taiga_contrib_gitlab_auth"]
+
+    # Get these from Admin -> Applications
+    GITLAB_URL = os.getenv('TAIGA_GITLAB_AUTH_URL')
+    GITLAB_API_CLIENT_ID = os.getenv('TAIGA_GITLAB_AUTH_CLIENT_ID')
+    GITLAB_API_CLIENT_SECRET = os.getenv('TAIGA_GITLAB_AUTH_CLIENT_SECRET')

@@ -9,6 +9,7 @@ git checkout ${TAIGA_VERSION}
 # TODO - create list and iterate over plugins to add them 
 echo "taiga-contrib-ldap-auth-ext==0.4.4" >> requirements.txt
 echo "gevent==1.4.0" >> requirements.txt
+echo "taiga-contrib-gitlab-auth-official==3.1.1" >> requirements.txt
 
 echo "Running standard assembling"
 

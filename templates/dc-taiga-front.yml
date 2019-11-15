@@ -106,7 +106,11 @@ objects:
           "termsOfServiceUrl": null,
           "GDPRUrl": null,
           "maxUploadFileSize": null,
-          "contribPlugins": [],
+          "gitLabClientId": "${GITLAB_API_CLIENT_ID}",
+          "gitLabUrl": "${GITLAB_URL}",
+          "contribPlugins": [
+              "/plugins/gitlab-auth/gitlab-auth.json"
+          ],
           "tribeHost": null,
           "importers": [],
           "gravatar": true,
@@ -185,6 +189,14 @@ parameters:
   displayName: Set mode for Taiga debugging
   description: Set mode for debugging on or off
   value: "false"
+- name: GITLAB_API_CLIENT_ID
+  displayName: Client ID for GitLab Auth
+  description: Client ID for GitLab Auth
+  value: "myclient123"
+- name: GITLAB_URL
+  displayName: URL of GitLab for Auth 
+  description: URL of GitLab for Auth 
+  value: "https://gitlab.myapps.com"
 - name: ENV_MOUNT_PATH
   displayName: Location for the env file to be loaded.
   description: Location for the env file to be loaded. This could be /opt/app-root/src for nginx or /usr/src/app for a node app
