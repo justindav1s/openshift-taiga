@@ -17,7 +17,8 @@ rc=$?
 
 if [ $rc -eq 0 ]; then
     echo "Putting local.py in settings dir for OCP fun times"
-    mv -v ${HOME}/*.py ${HOME}/taiga-back/settings/
+    mv -v ${HOME}/local.py ${HOME}/logging.py ${HOME}/taiga-back/settings/
+    mv -v ${HOME}/*.py ${HOME}/taiga-back/
     mv ${HOME}/taiga-back/* ${HOME}/
     fix-permissions /opt/app-root -P
 else
