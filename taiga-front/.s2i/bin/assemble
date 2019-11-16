@@ -3,15 +3,15 @@ echo "Before assembling - pulling the Taiga source and ammending the path for th
 TAIGA_VERSION=${TAIGA_VERSION:-"4.2.14-stable"}
 
 curl -L https://github.com/taigaio/taiga-front-dist/archive/${TAIGA_VERSION}.tar.gz | tar zxv -C /tmp/src/
+curl -L https://github.com/taigaio/taiga-contrib-gitlab-auth/archive/3.1.1.tar.gz | tar zxv -C /tmp/src/
 sed -i "s#conf.json#settings/conf.json#g" /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/**/js/app-loader.js
 
 mkdir -p /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/settings
+mkdir -p /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/plugins/gitlab-auth
+
+mv -v /tmp/src/taiga-contrib-gitlab-auth-3.1.1/front/dist/* /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/plugins/gitlab-auth/
 mv -v /tmp/src/conf.json /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/settings/
 mv -v /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/* ${HOME}
-
-wget -c https://github.com/taigaio/taiga-contrib-gitlab-auth/archive/3.1.1.tar.gz  -O - | tar -xz
-mkdir -p ${HOME}/plugins/gitlab-auth
-mv -v taiga-contrib-gitlab-auth-3.1.1/front/dist/* ${HOME}/plugins/gitlab-auth/
 
 /usr/libexec/s2i/assemble
 rc=$?
