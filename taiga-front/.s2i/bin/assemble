@@ -9,6 +9,10 @@ mkdir -p /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/settings
 mv -v /tmp/src/conf.json /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/settings/
 mv -v /tmp/src/taiga-front-dist-${TAIGA_VERSION}/dist/* ${HOME}
 
+wget -c https://github.com/taigaio/taiga-contrib-gitlab-auth/archive/3.1.1.tar.gz  -O - | tar -xz
+mkdir -p ${HOME}/plugins/gitlab-auth
+mv -v taiga-contrib-gitlab-auth-3.1.1/front/dist/* ${HOME}/plugins/gitlab-auth/
+
 /usr/libexec/s2i/assemble
 rc=$?
 
