@@ -41,13 +41,13 @@ DEFAULT_FROM_EMAIL = os.environ.get('TAIGA_FROM_EMAIL_ADDRESS', 'no-reply@exampl
 
 # Uncomment and populate with proper connection parameters
 # for enable email sending. EMAIL_HOST_USER should end by @domain.tld
-# EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', '')
-# EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'False')
-# EMAIL_HOST = os.environ.get('EMAIL_HOST','')
-# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
-# EMAIL_PORT = os.environ.get('EMAIL_PORT', '')
-# DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'no-reply@example.com')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', '')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'False')
+EMAIL_HOST = os.environ.get('EMAIL_HOST','')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_PORT = os.environ.get('EMAIL_PORT', '')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'no-reply@example.com')
 
 
 # CUSTOM PLUGINS
