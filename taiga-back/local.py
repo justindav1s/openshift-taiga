@@ -31,8 +31,8 @@ STATIC_ROOT = os.environ.get('HOME')+'/static'
 # disable public registration by default
 PUBLIC_REGISTER_ENABLED = os.environ.get('PUBLIC_REGISTER_ENABLED', False)
 
-DEFAULT_FROM_EMAIL = os.environ.get('TAIGA_FROM_EMAIL_ADDRESS', 'no-reply@example.com')
-# SERVER_EMAIL = DEFAULT_FROM_EMAIL
+DEFAULT_FROM_EMAIL = os.environ.get('TAIGA_FROM_EMAIL_ADDRESS', 'justinndavis@gmail.com')
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
 
 #CELERY_ENABLED = True
 
